@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List Users{% endblock %}
+
+{% block body %}
+
+<div class="container text-center">
+  <div class="row">
+      <div class="col-2">
+          <button><a href="{{ path('create_user_form')}}">Create User</a></button>
+      </div>
+    <div class="col-10"></div>
+    <div class="col-12">
+        <table id="users" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Full name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Website</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Full name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Website</th>
+            <th>Delete</th>
+        </tr>
+        </tfoot>
+    </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+    <script>
+        jQuery(document).ready(function() {
+            new DataTable('#users', {
+                // ajax: '../server_side/scripts/server_processing.php',
+                ajax: '../server_side_processing',
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                paging: false,
+                searching: false,
+                rowId: 'id',
+                "columns": [
+                    { "data": "id" },
+                    { "data": "username" },
+                    { "data": "name" },
+                    { "data": "email" },
+                    { "data": "phone" },
+                    { "data": "website" },
+                    { "defaultContent": '<button class="delete_button">Delete</button>' },
+                ]
+            });
+
+            $(document).on('click', '.delete_button', function() {
+                const id = $(this).closest('tr').attr('id');
+                if (id !== undefined) {
+                    window.location = '/delete_user?id=' + id;
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
